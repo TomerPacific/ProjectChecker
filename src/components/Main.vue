@@ -11,38 +11,38 @@
 
 <script>
 
-const BASE_URL = "https://project-checker-tomerpacific.herokuapp.com/"
+const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/';
 export default {
   name: 'Main',
   props: {
-    msg: String
+    msg: String,
   },
   data() {
     return {
       statuses: [],
-      message: ""
-    }
+      message: '',
+    };
   },
   created() {
-    let that = this;
-    fetch(BASE_URL + "websiteStatus?url=https://tomerpacific.github.io/firebaseScraper/")
-    .then(function(response) {
-      if (Object.prototype.hasOwnProperty.call(response, 'website') &&
-        Object.prototype.hasOwnProperty.call(response, 'websiteStatus')) {
+    const that = this;
+    fetch(`${BASE_URL}websiteStatus?url=https://tomerpacific.github.io/firebaseScraper/`)
+      .then((response) => {
+        if (Object.prototype.hasOwnProperty.call(response, 'website')
+      && Object.prototype.hasOwnProperty.call(response, 'websiteStatus')) {
           that.statuses.push({
             name: response.website,
-            status: response.websiteStatus
+            status: response.websiteStatus,
           });
-      }
-    })
-    .catch(function(error) {
-      that.statuses.push({
-            name: 'Error',
-            status: error
-          });
-    })
+        }
+      })
+      .catch((error) => {
+        that.statuses.push({
+          name: 'Error',
+          status: error,
+        });
+      });
   },
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
