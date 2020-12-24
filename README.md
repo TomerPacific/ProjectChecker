@@ -1,4 +1,4 @@
-# frontend
+# ProjectChecker
 
 ## Project setup
 ```
