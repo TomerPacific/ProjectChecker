@@ -3,14 +3,9 @@ const app = express()
 var port = process.env.PORT || 3000
 
 const fetch = require("node-fetch");
+const cors = require('cors');
 
-app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    res.header('Access-Control-Allow-Credentials', true)
-    return next()
-  });
+app.use(cors());
 
   app.get('/websiteStatus', function (req, res) {
     let url = req.query.url;
