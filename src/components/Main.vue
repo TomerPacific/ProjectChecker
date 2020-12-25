@@ -2,9 +2,6 @@
   <div class="hello">
     <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /> </h1>
     <ul class="projectsList">
-      <li v-for="website in statuses" :key="website">
-          {{website.name + " | " + website.status}}
-      </li>
     </ul>
   </div>
 </template>
@@ -26,12 +23,18 @@ export default {
   created() {
     const that = this;
     fetch(`${BASE_URL}websiteStatus?url=https://tomerpacific.github.io/firebaseScraper/`)
-      .then((response) => {
-        if (Object.prototype.hasOwnProperty.call(response, 'website')
-      && Object.prototype.hasOwnProperty.call(response, 'websiteStatus')) {
+      .then((response) => response.json())
+      .then((data) => {
+        if (Object.prototype.hasOwnProperty.call(data, 'website')
+      && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
           that.statuses.push({
-            name: response.website,
-            status: response.websiteStatus,
+            name: data.website,
+            status: data.websiteStatus,
+          });
+        } else {
+          that.statuses.push({
+            name: 'Error',
+            status: 'No information was received from the server',
           });
         }
       })
