@@ -4,12 +4,13 @@ var port = process.env.PORT || 3000
 
 const fetch = require("node-fetch");
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 app.use(cors());
+app.use(bodyParser.json());
 
   app.get('/websiteStatus', function (req, res) {
     let url = req.query.url;
-
     if (!url) {
       res.status(500).send(
         { website: url,
@@ -19,17 +20,10 @@ app.use(cors());
     }
     fetch(url)
     .then(function(response) {
-      if (response.ok) {
-        res.status(200).send(
-          { website: url,
-            websiteStatus: 'ok'
-          })
-      } else {
         res.status(200).send(
           { website: url,
             websiteStatus: response.status
           })
-      }
     })
     .catch(function(error) {
       res.status(500).send(
