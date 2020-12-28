@@ -2,6 +2,9 @@
   <div class="hello">
     <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /> </h1>
     <ul class="projectsList">
+      <li v-for="website in statuses" :key="website.name">
+        {{website.name + ' || ' + website.status}}
+      </li>
     </ul>
   </div>
 </template>
