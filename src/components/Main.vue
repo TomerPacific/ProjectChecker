@@ -65,22 +65,6 @@ export default {
           status: error,
         });
       });
-    // fetch(`${BASE_URL}websiteStatus?url=https://tomerpacific.github.io/firebaseScraper/`)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     if (Object.prototype.hasOwnProperty.call(data, 'website')
-    //   && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
-    //       that.statuses.push({
-    //         name: data.website,
-    //         status: data.websiteStatus,
-    //       });
-    //     } else {
-    //       that.statuses.push({
-    //         name: 'Error',
-    //         status: 'No information was received from the server',
-    //       });
-    //     }
-    //   })
   },
 };
 </script>
