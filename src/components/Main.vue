@@ -35,27 +35,7 @@ export default {
   },
   created() {
     const that = this;
-    Promise.all(projectEndpoints.map((endpoint) => new Promise((resolve, reject) => {
-      fetch(`${BASE_URL}websiteStatus?url=${endpoint}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (Object.prototype.hasOwnProperty.call(data, 'website')
-      && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
-            that.statuses.push({
-              name: data.website,
-              status: data.websiteStatus,
-            });
-            resolve();
-          } else {
-            that.statuses.push({
-              name: 'Error',
-              status: 'No information was received from the server',
-            });
-            resolve();
-          }
-          reject();
-        });
-    })))
+    Promise.all(projectEndpoints.map((endpoint) => this.createFetchPromise(endpoint, that)))
       .then((results) => {
         console.log(results);
       })
@@ -65,6 +45,31 @@ export default {
           status: error,
         });
       });
+  },
+  methods: {
+    createFetchPromise(endpoint, vm) {
+      return new Promise((resolve, reject) => {
+        fetch(`${BASE_URL}websiteStatus?url=${endpoint}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (Object.prototype.hasOwnProperty.call(data, 'website')
+      && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
+              vm.statuses.push({
+                name: data.website,
+                status: data.websiteStatus,
+              });
+              resolve();
+            } else {
+              vm.statuses.push({
+                name: 'Error',
+                status: 'No information was received from the server',
+              });
+              resolve();
+            }
+            reject();
+          });
+      });
+    },
   },
 };
 </script>
