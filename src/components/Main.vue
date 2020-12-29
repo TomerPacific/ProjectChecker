@@ -3,7 +3,7 @@
     <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /> </h1>
     <ul class="projectsList">
       <li v-for="website in statuses" :key="website.name">
-        {{website.name + ' || ' + website.status}}
+        <a v-bind:href="website.name">{{extractServiceNameFromUrl(website.name)}}</a>
       </li>
     </ul>
   </div>
@@ -69,6 +69,11 @@ export default {
             reject();
           });
       });
+    },
+    extractServiceNameFromUrl(endpoint) {
+      const splitEndpoint = endpoint.split('/');
+      const endpointName = splitEndpoint[splitEndpoint.length - 2];
+      return endpointName;
     },
   },
 };
