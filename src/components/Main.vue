@@ -4,6 +4,8 @@
     <ul class="projectsList">
       <li v-for="website in statuses" :key="website.name">
         <a v-bind:href="website.name" target="_blank">{{extractServiceNameFromUrl(website.name)}}</a>
+        <span class="websiteStatus" v-if="website.status === 200">&#9989;</span>
+        <span class="websiteStatus" v-else>&#10060;</span>
       </li>
     </ul>
   </div>
@@ -104,6 +106,10 @@ a:hover {
 #logo {
   width: 25px;
   height: 25px;
+}
+
+.websiteStatus {
+  margin-left: 1%;
 }
 
 </style>
