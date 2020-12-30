@@ -90,10 +90,15 @@ ul {
 }
 li {
   display: block;
-  margin: 0 10px;
+  margin: 10px 10px;
 }
 a {
   color: #42b983;
+  text-decoration: none;
+}
+
+a:hover {
+  color: black;
 }
 
 #logo {
