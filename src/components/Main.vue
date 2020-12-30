@@ -3,7 +3,7 @@
     <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /> </h1>
     <ul class="projectsList">
       <li v-for="website in statuses" :key="website.name">
-        <a v-bind:href="website.name">{{extractServiceNameFromUrl(website.name)}}</a>
+        <a v-bind:href="website.name" target="_blank">{{extractServiceNameFromUrl(website.name)}}</a>
       </li>
     </ul>
   </div>
