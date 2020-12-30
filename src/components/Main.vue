@@ -3,7 +3,9 @@
     <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /> </h1>
     <ul class="projectsList">
       <li v-for="website in statuses" :key="website.name">
-        {{website.name + ' || ' + website.status}}
+        <a v-bind:href="website.name" target="_blank">{{extractServiceNameFromUrl(website.name)}}</a>
+        <span class="websiteStatus" v-if="website.status === 200">&#9989;</span>
+        <span class="websiteStatus" v-else>&#10060;</span>
       </li>
     </ul>
   </div>
@@ -35,27 +37,7 @@ export default {
   },
   created() {
     const that = this;
-    Promise.all(projectEndpoints.map((endpoint) => new Promise((resolve, reject) => {
-      fetch(`${BASE_URL}websiteStatus?url=${endpoint}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (Object.prototype.hasOwnProperty.call(data, 'website')
-      && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
-            that.statuses.push({
-              name: data.website,
-              status: data.websiteStatus,
-            });
-            resolve();
-          } else {
-            that.statuses.push({
-              name: 'Error',
-              status: 'No information was received from the server',
-            });
-            resolve();
-          }
-          reject();
-        });
-    })))
+    Promise.all(projectEndpoints.map((endpoint) => this.createFetchPromise(endpoint, that)))
       .then((results) => {
         console.log(results);
       })
@@ -65,6 +47,36 @@ export default {
           status: error,
         });
       });
+  },
+  methods: {
+    createFetchPromise(endpoint, vm) {
+      return new Promise((resolve, reject) => {
+        fetch(`${BASE_URL}websiteStatus?url=${endpoint}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (Object.prototype.hasOwnProperty.call(data, 'website')
+      && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
+              vm.statuses.push({
+                name: data.website,
+                status: data.websiteStatus,
+              });
+              resolve();
+            } else {
+              vm.statuses.push({
+                name: 'Error',
+                status: 'No information was received from the server',
+              });
+              resolve();
+            }
+            reject();
+          });
+      });
+    },
+    extractServiceNameFromUrl(endpoint) {
+      const splitEndpoint = endpoint.split('/');
+      const endpointName = splitEndpoint[splitEndpoint.length - 2];
+      return endpointName;
+    },
   },
 };
 </script>
@@ -80,15 +92,24 @@ ul {
 }
 li {
   display: block;
-  margin: 0 10px;
+  margin: 10px 10px;
 }
 a {
   color: #42b983;
+  text-decoration: none;
+}
+
+a:hover {
+  color: black;
 }
 
 #logo {
   width: 25px;
   height: 25px;
+}
+
+.websiteStatus {
+  margin-left: 1%;
 }
 
 </style>
