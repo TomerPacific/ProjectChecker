@@ -1,24 +1,6 @@
 # ProjectChecker
 
-## Project setup
-```
-yarn install
-```
+A project that uses a Node.js backend that makes fetch requests to check the status of various projects that I have.
+It then presents the status of the projects using Vue.
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![Screenshot](https://github.com/TomerPacific/ProjectChecker/blob/main/public/screenshot.jpg?raw=true)
