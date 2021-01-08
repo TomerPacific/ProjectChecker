@@ -1,7 +1,8 @@
 <template>
   <div class="hello">
     <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /> </h1>
-    <ul class="projectsList">
+    <Loader v-if="isLoading"/>
+    <ul v-if="!isLoading" class="projectsList">
       <li v-for="website in statuses" :key="website.name">
         <a v-bind:href="website.name" target="_blank">{{extractServiceNameFromUrl(website.name)}}</a>
         <span class="websiteStatus" v-if="website.status === 200">&#9989;</span>
@@ -12,6 +13,8 @@
 </template>
 
 <script>
+
+import Loader from './Loader.vue';
 
 const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/';
 const projectEndpoints = [
@@ -25,6 +28,7 @@ const projectEndpoints = [
   'https://tomerpacific.github.io/github-utils/',
 ];
 export default {
+  components: { Loader },
   name: 'Main',
   props: {
     msg: String,
@@ -33,19 +37,21 @@ export default {
     return {
       statuses: [],
       message: '',
+      isLoading: true,
     };
   },
   created() {
     const that = this;
     Promise.all(projectEndpoints.map((endpoint) => this.createFetchPromise(endpoint, that)))
-      .then((results) => {
-        console.log(results);
+      .then(() => {
+        that.isLoading = false;
       })
       .catch((error) => {
         that.statuses.push({
           name: 'Error',
           status: error,
         });
+        that.isLoading = false;
       });
   },
   methods: {
