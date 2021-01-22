@@ -28,9 +28,9 @@ app.use(bodyParser.json());
           { website: url,
             websiteStatus: response.status
           })
-          //if (response.status !== 200) {
+          if (response.status !== 200) {
               sendMail(url, response.status);
-         // }
+          }
     })
     .catch(function(error) {
       res.status(500).send(
