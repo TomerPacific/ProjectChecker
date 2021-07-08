@@ -16,17 +16,8 @@
 
 import Loader from './Loader.vue';
 
-const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/';
-const projectEndpoints = [
-  'https://tomerpacific.github.io/firebaseScraper/',
-  'https://tomerpacific.github.io/julOnSale/',
-  'https://tomerpacific.github.io/Android-XML-Menu-Generator/',
-  'https://tomerpacific.github.io/MediumArticleFetcher/',
-  'https://tomerpacific.github.io/pull-request-presenter/',
-  'https://tomerpacific.github.io/Portfolio/',
-  'https://tomerpacific.github.io/resume-reviewer/',
-  'https://tomerpacific.github.io/github-utils/',
-];
+const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/checkStatus';
+
 export default {
   components: { Loader },
   name: 'Main',
@@ -41,39 +32,29 @@ export default {
     };
   },
   created() {
-    const that = this;
-    Promise.all(projectEndpoints.map((endpoint) => this.createFetchPromise(endpoint, that)))
+    this.getWebsitesStatus()
       .then(() => {
-        that.isLoading = false;
+
       })
-      .catch((error) => {
-        that.statuses.push({
-          name: 'Error',
-          status: error,
-        });
-        that.isLoading = false;
+      .catch(() => {
+
       });
   },
   methods: {
-    createFetchPromise(endpoint, vm) {
+    getWebsitesStatus() {
       return new Promise((resolve, reject) => {
-        fetch(`${BASE_URL}websiteStatus?url=${endpoint}`)
-          .then((response) => response.json())
+        this.isLoading = false;
+        fetch(BASE_URL)
+          .then((result) => result.json())
           .then((data) => {
-            if (Object.prototype.hasOwnProperty.call(data, 'website')
-      && Object.prototype.hasOwnProperty.call(data, 'websiteStatus')) {
-              vm.statuses.push({
-                name: data.website,
-                status: data.websiteStatus,
-              });
-              resolve();
-            } else {
-              vm.statuses.push({
-                name: 'Error',
-                status: 'No information was received from the server',
-              });
-              resolve();
-            }
+            this.statuses = data.websites;
+            resolve();
+          })
+          .catch((error) => {
+            this.statuses.push({
+              name: 'Error',
+              status: error,
+            });
             reject();
           });
       });

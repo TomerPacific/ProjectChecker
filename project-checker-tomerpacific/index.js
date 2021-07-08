@@ -1,17 +1,52 @@
 const express = require('express')
 const app = express()
 var port = process.env.PORT || 3000
+
 require('dotenv').config()
 
-const fetch = require("node-fetch");
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const constants = require('./projectCheckerConstants');
+const fetch = require('node-fetch');
+const { response } = require('express');
 
-
+let statuses = [];
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.get('/checkStatus', function(req, res) {
+  statuses = [];
+  Promise.all(constants.projectEndpoints.map((endpoint) => 
+  {
+    return new Promise(function(resolve, reject) {
+      fetch(endpoint)
+      .then((result) => {
+        if (result.url && result.status) {
+          statuses.push({
+            name: result.url,
+            status: result.status
+          });
+          resolve();
+      } else {
+        statuses.push({
+          name: 'Error',
+          status: 'No information was received from the server',
+        });
+        resolve();
+      }
+      reject();
+      })
+    })
+  })
+).then(function() {
+  res.status(200).send(
+    { websites: statuses}
+    )
+  })
+  .catch((error) => console.error(error));
+});
 
   app.get('/websiteStatus', function (req, res) {
     let url = req.query.url;
