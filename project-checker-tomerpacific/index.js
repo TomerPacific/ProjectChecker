@@ -17,6 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/checkStatus', function(req, res) {
+  statuses = [];
   Promise.all(constants.projectEndpoints.map((endpoint) => 
   {
     return new Promise(function(resolve, reject) {
