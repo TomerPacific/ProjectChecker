@@ -34,16 +34,15 @@ export default {
   created() {
     this.getWebsitesStatus()
       .then(() => {
-
+        this.isLoading = false;
       })
       .catch(() => {
-
+        this.isLoading = false;
       });
   },
   methods: {
     getWebsitesStatus() {
       return new Promise((resolve, reject) => {
-        this.isLoading = false;
         fetch(BASE_URL)
           .then((result) => result.json())
           .then((data) => {
