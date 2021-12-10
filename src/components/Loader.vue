@@ -5,14 +5,16 @@
    </div>
 </template>
 
-<script>
+<script lang="ts">
 
-export default {
+import Vue from 'vue';
+
+export default Vue.extend({
   name: 'Loader',
-};
+});
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .lds-ripple {
   display: inline-block;
