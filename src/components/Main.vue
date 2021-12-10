@@ -12,13 +12,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
+import Vue from 'vue';
 import Loader from './Loader.vue';
+import { WebsiteStatus } from '../models/website_status';
+import { WebsiteStatusResponse } from '../models/website_status_response';
 
 const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/checkStatus';
 
-export default {
+export default Vue.extend({
   components: { Loader },
   name: 'Main',
   props: {
@@ -26,14 +29,15 @@ export default {
   },
   data() {
     return {
-      statuses: [],
-      message: '',
-      isLoading: true,
+      statuses: [] as Array<WebsiteStatus>,
+      message: "" as string,
+      isLoading: true as boolean,
     };
   },
   created() {
     this.getWebsitesStatus()
-      .then(() => {
+      .then((websites: Array<WebsiteStatus>) => {
+        this.statuses = websites;
         this.isLoading = false;
       })
       .catch(() => {
@@ -42,32 +46,30 @@ export default {
   },
   methods: {
     getWebsitesStatus() {
-      return new Promise((resolve, reject) => {
+      return new Promise<Array<WebsiteStatus>>((resolve, reject) => {
         fetch(BASE_URL)
           .then((result) => result.json())
-          .then((data) => {
-            this.statuses = data.websites;
-            resolve();
+          .then((data: WebsiteStatusResponse) => {
+            resolve(data.websites);
           })
           .catch((error) => {
             this.statuses.push({
-              name: 'Error',
+              url: 'Error',
               status: error,
             });
             reject();
           });
       });
     },
-    extractServiceNameFromUrl(endpoint) {
+    extractServiceNameFromUrl(endpoint: String): String {
       const splitEndpoint = endpoint.split('/');
       const endpointName = splitEndpoint[splitEndpoint.length - 2];
       return endpointName;
     },
   },
-};
+});
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
