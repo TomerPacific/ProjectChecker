@@ -16,6 +16,8 @@
 
 import Vue from 'vue';
 import Loader from './Loader.vue';
+import { WebsiteStatus } from '../models/website_status';
+import { WebsiteStatusResponse } from '../models/website_status_response';
 
 const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/checkStatus';
 
@@ -27,14 +29,14 @@ export default Vue.extend({
   },
   data() {
     return {
-      statuses: [] as Array<any>,
+      statuses: [] as Array<WebsiteStatus>,
       message: "" as string,
       isLoading: true as boolean,
     };
   },
   created() {
     this.getWebsitesStatus()
-      .then((websites: any) => {
+      .then((websites: Array<WebsiteStatus>) => {
         this.statuses = websites;
         this.isLoading = false;
       })
@@ -44,15 +46,15 @@ export default Vue.extend({
   },
   methods: {
     getWebsitesStatus() {
-      return new Promise((resolve, reject) => {
+      return new Promise<Array<WebsiteStatus>>((resolve, reject) => {
         fetch(BASE_URL)
           .then((result) => result.json())
-          .then((data) => {
+          .then((data: WebsiteStatusResponse) => {
             resolve(data.websites);
           })
           .catch((error) => {
             this.statuses.push({
-              name: 'Error',
+              url: 'Error',
               status: error,
             });
             reject();
