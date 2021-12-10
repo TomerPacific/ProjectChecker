@@ -12,13 +12,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
+import Vue from 'vue';
 import Loader from './Loader.vue';
 
 const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/checkStatus';
 
-export default {
+export default Vue.extend({
   components: { Loader },
   name: 'Main',
   props: {
@@ -26,14 +27,15 @@ export default {
   },
   data() {
     return {
-      statuses: [],
-      message: '',
-      isLoading: true,
+      statuses: [] as Array<any>,
+      message: "" as string,
+      isLoading: true as boolean,
     };
   },
   created() {
     this.getWebsitesStatus()
-      .then(() => {
+      .then((websites: any) => {
+        this.statuses = websites;
         this.isLoading = false;
       })
       .catch(() => {
@@ -46,8 +48,7 @@ export default {
         fetch(BASE_URL)
           .then((result) => result.json())
           .then((data) => {
-            this.statuses = data.websites;
-            resolve();
+            resolve(data.websites);
           })
           .catch((error) => {
             this.statuses.push({
@@ -58,13 +59,13 @@ export default {
           });
       });
     },
-    extractServiceNameFromUrl(endpoint) {
+    extractServiceNameFromUrl(endpoint: String): String {
       const splitEndpoint = endpoint.split('/');
       const endpointName = splitEndpoint[splitEndpoint.length - 2];
       return endpointName;
     },
   },
-};
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
