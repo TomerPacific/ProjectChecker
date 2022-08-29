@@ -19,7 +19,7 @@ import Loader from './Loader.vue';
 import { WebsiteStatus } from '../models/website_status';
 import { WebsiteStatusResponse } from '../models/website_status_response';
 
-const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/checkStatus';
+const BASE_URL = 'https://project-checker-tomerpacific.el.r.appspot.com/checkStatus';
 
 export default Vue.extend({
   components: { Loader },
