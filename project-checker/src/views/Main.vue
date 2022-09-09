@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineProps } from 'vue';
+import { defineComponent } from 'vue';
 import Loader from './Loader.vue';
 import { WebsiteStatus } from '../models/website_status';
 import { WebsiteStatusResponse } from '../models/website_status_response';
 
-const BASE_URL = 'https://project-checker-tomerpacific.el.r.appspot.com/checkStatus';
+const BASE_URL = 'https://project-checker-tomerpacific.herokuapp.com/checkStatus';
 
 export default defineComponent({
   name: 'MainView',
