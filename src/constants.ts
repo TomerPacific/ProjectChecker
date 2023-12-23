@@ -1,5 +1,4 @@
 const projectEndpoints = [
-    'https://tomerpacific.github.io/firebaseScraper/',
     'https://tomerpacific.github.io/julOnSale/',
     'https://tomerpacific.github.io/Android-XML-Menu-Generator/',
     'https://tomerpacific.github.io/MediumArticleFetcher/',
