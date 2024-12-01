@@ -1,23 +1,14 @@
+<script setup lang="ts">
+import Main from './components/Main.vue';
+</script>
+
 <template>
   <div id="app">
     <Main msg="Welcome to Your ProjectChecker"/>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Main from './views/Main.vue';
-
-export default defineComponent({
-  name: 'FirstScreen',
-  components: {
-    Main,
-  },
-});
-
-</script>
-
-<style lang="scss">
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

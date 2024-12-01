@@ -1,4 +1,4 @@
-import { WebsiteStatus } from "./website_status";
+import type { WebsiteStatus } from "./website_status";
 
 export type WebsiteStatusResponse = {
     websites: Array<WebsiteStatus>
