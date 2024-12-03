@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { WebsiteStatus } from '../models/website_status'
-import { WebsiteStatusResponse } from '../models/website_status_response'
+import { type WebsiteStatus } from '../models/website_status'
+import { type WebsiteStatusResponse } from '../models/website_status_response'
 const BASE_URL = 'https://project-checker.onrender.com/checkStatus'
 defineProps(['msg'])
 const isLoaded = ref(false)
