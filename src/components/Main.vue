@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { type WebsiteStatus } from '../models/website_status'
 import { type WebsiteStatusResponse } from '../models/website_status_response'
 const BASE_URL = 'https://project-checker.onrender.com/checkStatus'
 defineProps(['msg'])
 const isLoaded = ref(false)
-const statuses = ref([])
+let statuses: Array<WebsiteStatus> = reactive([])
 
 function extractServiceNameFromUrl(endpoint: string): string {
   const splitEndpoint = endpoint.split('/')
@@ -21,7 +21,7 @@ function getWebsitesStatus() {
         resolve(data.websites)
       })
       .catch((error) => {
-        statuses.value.push({
+        statuses.push({
           url: 'Error',
           status: error,
         })
@@ -33,7 +33,7 @@ function getWebsitesStatus() {
 onMounted(() => {
   getWebsitesStatus()
     .then((websites: Array<WebsiteStatus>) => {
-      statuses.value = websites
+      statuses = websites
       isLoaded.value = true
     })
     .catch(() => {
