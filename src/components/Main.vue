@@ -22,7 +22,7 @@ function getWebsitesStatus() {
       })
       .catch((error) => {
         statuses.push({
-          url: 'Error',
+          name: 'Error',
           status: error,
         })
         reject()

@@ -1,4 +1,4 @@
 export type WebsiteStatus = {
-    url: string,
-    status: number
+  name: string
+  status: number
 }
