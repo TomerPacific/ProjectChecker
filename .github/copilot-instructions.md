@@ -47,7 +47,7 @@ npm run dev
 ```bash
 npm run build
 ```
-- Runs type-check and vite build in parallel via `run-p`
+- Runs type-check and vite build in parallel via `run-p` (npm-run-all)
 - Output: `dist/` directory
 - Takes ~10-15 seconds
 - Creates production-ready assets with hash-based filenames
