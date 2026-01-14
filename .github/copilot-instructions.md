@@ -8,7 +8,7 @@
 - **Size:** Small project (~25 source files)
 - **Frontend:** Vue 3.5.12 with TypeScript
 - **Build Tool:** Vite 6.4.1
-- **Runtime:** Node.js v20.19.6, npm 10.8.2
+- **Runtime:** Node.js v20.x (tested with 20.19.6), npm 10.x (tested with 10.8.2)
 - **Testing:** Vitest (unit tests), Playwright 1.56.1 (e2e tests)
 - **Deployment:** GitHub Pages (base path: `/ProjectChecker/`)
 
