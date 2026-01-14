@@ -42,26 +42,26 @@ npm run dev
 - Press Ctrl+C to stop
 
 ### Building
-**ALWAYS run these commands in this exact order:**
 
-1. **Type Check First:**
+**Build (includes type-check):**
+```bash
+npm run build
+```
+- Runs type-check and vite build in parallel via `run-p`
+- Output: `dist/` directory
+- Takes ~10-15 seconds
+- Creates production-ready assets with hash-based filenames
+
+**Type Check Only (optional, for faster feedback):**
 ```bash
 npm run type-check
 ```
 - Runs `vue-tsc --build --force`
 - Takes ~5-10 seconds
-- Must pass before building
+- Can be run separately before building to catch type errors early
+- Not required if running `npm run build` (which includes type-check)
 
-2. **Build:**
-```bash
-npm run build
-```
-- Runs type-check and vite build in parallel
-- Output: `dist/` directory
-- Takes ~10-15 seconds
-- Creates production-ready assets with hash-based filenames
-
-3. **Preview Build:**
+**Preview Build:**
 ```bash
 npm run preview
 ```
