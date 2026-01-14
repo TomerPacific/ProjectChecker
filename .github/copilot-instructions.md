@@ -236,7 +236,7 @@ e2e/                       - E2E test directory (currently only tsconfig.json)
 - **Solution:** This is a known existing issue. Do NOT change Main.vue to MainPage.vue or similar unless explicitly asked.
 
 **Issue: Unit tests exit with code 1 "No test files found"**
-- **Solution:** This is expected - no test files exist. If adding tests, create them in `src/**/__tests__/*.spec.ts`
+- **Solution:** This is expected - no test files exist. If adding tests, place them anywhere under `src/` matching Vitest's pattern `**/*.{test,spec}.?(c|m)[jt]s?(x)` (for example, `src/**/__tests__/*.spec.ts`).
 
 **Issue: Build fails with type errors**
 - **Solution:** Run `npm run type-check` first to see detailed TypeScript errors
