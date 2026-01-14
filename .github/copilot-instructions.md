@@ -76,7 +76,8 @@ npm run lint
 ```
 - Runs ESLint with auto-fix enabled
 - **KNOWN ISSUE:** Component name "Main" violates `vue/multi-word-component-names` rule
-- This is an existing issue in the codebase - do NOT fix it unless specifically asked
+- This component was named "Main" in the original implementation and changing it would require updating imports and references throughout the codebase
+- Do NOT fix this issue unless specifically asked
 - Takes ~5-10 seconds
 
 **Formatting:**
