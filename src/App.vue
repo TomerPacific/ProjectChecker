@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Main from './components/Main.vue';
+import Main from './components/Main.vue'
 </script>
 
 <template>
   <div id="app">
-    <Main msg="Welcome to Your ProjectChecker"/>
+    <Main msg="Welcome to Your ProjectChecker" />
   </div>
 </template>
 
@@ -16,6 +16,4 @@ import Main from './components/Main.vue';
   text-align: center;
   color: #2c3e50;
 }
-
-
 </style>
