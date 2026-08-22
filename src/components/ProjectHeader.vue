@@ -11,7 +11,7 @@ defineEmits<{
 <template>
   <header class="header">
     <div class="header__brand">
-      <img class="header__logo" src="../assets/logo.svg" alt="" />
+      <img class="header__logo" src="../assets/logo.png" alt="ProjectChecker logo" />
       <div>
         <h1 class="header__title">ProjectChecker</h1>
         <p class="header__subtitle">Monitor your deployed projects</p>
@@ -59,9 +59,10 @@ defineEmits<{
 }
 
 .header__logo {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
+  object-fit: contain;
 }
 
 .header__title {
