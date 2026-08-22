@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { WebsiteStatus } from '../models/website_status'
-import { extractServiceNameFromUrl } from '../utils/url'
+import { extractServiceNameFromUrl, getSafeHttpUrl } from '../utils/url'
 
 const props = defineProps<{
   website: WebsiteStatus
@@ -9,18 +9,28 @@ const props = defineProps<{
 
 const isOnline = computed(() => props.website.status === 200)
 const serviceName = computed(() => extractServiceNameFromUrl(props.website.name))
+const safeUrl = computed(() => getSafeHttpUrl(props.website.name))
 const statusLabel = computed(() =>
   isOnline.value ? 'Online' : `Offline (${props.website.status})`,
 )
+const ariaLabel = computed(() => {
+  const status = isOnline.value ? 'online' : 'offline'
+  if (safeUrl.value) {
+    return `${serviceName.value} is ${status}`
+  }
+  return `${serviceName.value} is ${status}, link unavailable`
+})
 </script>
 
 <template>
-  <a
+  <component
+    :is="safeUrl ? 'a' : 'div'"
     class="card"
-    :href="website.name"
-    target="_blank"
-    rel="noopener noreferrer"
-    :aria-label="`${serviceName} is ${isOnline ? 'online' : 'offline'}`"
+    :class="{ 'card--static': !safeUrl }"
+    :href="safeUrl ?? undefined"
+    :target="safeUrl ? '_blank' : undefined"
+    :rel="safeUrl ? 'noopener noreferrer' : undefined"
+    :aria-label="ariaLabel"
   >
     <div class="card__content">
       <span class="card__name">{{ serviceName }}</span>
@@ -33,7 +43,7 @@ const statusLabel = computed(() =>
       <span class="card__badge-dot" aria-hidden="true"></span>
       {{ statusLabel }}
     </span>
-  </a>
+  </component>
 </template>
 
 <style scoped>
@@ -61,6 +71,14 @@ const statusLabel = computed(() =>
   border-color: var(--color-border-hover);
   box-shadow: var(--shadow-card-hover);
   transform: translateY(-1px);
+}
+
+.card--static {
+  cursor: default;
+}
+
+.card--static:hover {
+  transform: none;
 }
 
 .card:focus-visible {

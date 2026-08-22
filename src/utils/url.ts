@@ -1,3 +1,17 @@
+const ALLOWED_SCHEMES = new Set(['http:', 'https:'])
+
+export function getSafeHttpUrl(raw: string): string | null {
+  try {
+    const url = new URL(raw)
+    if (!ALLOWED_SCHEMES.has(url.protocol)) {
+      return null
+    }
+    return url.href
+  } catch {
+    return null
+  }
+}
+
 export function extractServiceNameFromUrl(endpoint: string): string {
   try {
     const url = new URL(endpoint)
