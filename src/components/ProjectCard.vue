@@ -26,7 +26,6 @@ const ariaLabel = computed(() => {
   <component
     :is="safeUrl ? 'a' : 'div'"
     class="card"
-    :class="{ 'card--static': !safeUrl }"
     :href="safeUrl ?? undefined"
     :target="safeUrl ? '_blank' : undefined"
     :rel="safeUrl ? 'noopener noreferrer' : undefined"
@@ -66,22 +65,14 @@ const ariaLabel = computed(() => {
     transform 0.15s;
 }
 
-.card:hover {
+a.card:hover {
   background: var(--color-card-hover);
   border-color: var(--color-border-hover);
   box-shadow: var(--shadow-card-hover);
   transform: translateY(-1px);
 }
 
-.card--static {
-  cursor: default;
-}
-
-.card--static:hover {
-  transform: none;
-}
-
-.card:focus-visible {
+a.card:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
