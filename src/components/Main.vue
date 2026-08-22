@@ -1,109 +1,125 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
-import { type WebsiteStatus } from '../models/website_status'
-import { type WebsiteStatusResponse } from '../models/website_status_response'
+import { ref, onMounted, onUnmounted } from 'vue'
+import type { WebsiteStatus } from '../models/website_status'
+import type { WebsiteStatusResponse } from '../models/website_status_response'
+import ProjectHeader from './ProjectHeader.vue'
+import StatusSummary from './StatusSummary.vue'
+import ProjectCard from './ProjectCard.vue'
+import LoadingSkeleton from './LoadingSkeleton.vue'
+import ErrorBanner from './ErrorBanner.vue'
+
 const BASE_URL = 'https://project-checker.onrender.com/checkStatus'
-defineProps(['msg'])
-const isLoaded = ref(false)
-let statuses: Array<WebsiteStatus> = reactive([])
 
-function extractServiceNameFromUrl(endpoint: string): string {
-  const splitEndpoint = endpoint.split('/')
-  const endpointName = splitEndpoint[splitEndpoint.length - 2]
-  return endpointName
+const statuses = ref<WebsiteStatus[]>([])
+const isLoading = ref(true)
+const hasError = ref(false)
+const lastChecked = ref<Date | null>(null)
+let fetchController: AbortController | null = null
+
+async function fetchStatuses() {
+  fetchController?.abort()
+  const controller = new AbortController()
+  fetchController = controller
+
+  isLoading.value = true
+  hasError.value = false
+
+  try {
+    const result = await fetch(BASE_URL, { signal: controller.signal })
+
+    if (!result.ok) {
+      throw new Error(`HTTP ${result.status}`)
+    }
+
+    const data: WebsiteStatusResponse = await result.json()
+
+    if (!Array.isArray(data.websites)) {
+      throw new Error('Invalid response shape')
+    }
+
+    statuses.value = data.websites
+    lastChecked.value = new Date()
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      return
+    }
+    hasError.value = true
+    statuses.value = []
+  } finally {
+    if (fetchController === controller) {
+      isLoading.value = false
+    }
+  }
 }
 
-function getWebsitesStatus() {
-  return new Promise<Array<WebsiteStatus>>((resolve, reject) => {
-    fetch(BASE_URL)
-      .then((result) => result.json())
-      .then((data: WebsiteStatusResponse) => {
-        resolve(data.websites)
-      })
-      .catch((error) => {
-        statuses.push({
-          name: 'Error',
-          status: error,
-        })
-        reject()
-      })
-  })
-}
+onMounted(fetchStatuses)
 
-onMounted(() => {
-  getWebsitesStatus()
-    .then((websites: Array<WebsiteStatus>) => {
-      statuses = websites
-      isLoaded.value = true
-    })
-    .catch(() => {
-      isLoaded.value = false
-    })
+onUnmounted(() => {
+  fetchController?.abort()
+  fetchController = null
 })
 </script>
 
 <template>
-  <div class="hello">
-    <h1>{{ msg }} <img id="logo" src="../assets/logo.png" /></h1>
-    <div v-if="!isLoaded" class="loader"></div>
-    <ul v-if="isLoaded" class="projectsList">
+  <div class="dashboard">
+    <ProjectHeader :loading="isLoading" @refresh="fetchStatuses" />
+
+    <ErrorBanner v-if="hasError && !isLoading" @retry="fetchStatuses" />
+
+    <StatusSummary
+      v-if="!isLoading && !hasError && statuses.length > 0"
+      :statuses="statuses"
+      :last-checked="lastChecked"
+    />
+
+    <LoadingSkeleton v-if="isLoading" />
+
+    <ul
+      v-else-if="!hasError && statuses.length > 0"
+      class="project-list"
+      aria-label="Project statuses"
+    >
       <li v-for="website in statuses" :key="website.name">
-        <a v-bind:href="website.name" target="_blank">{{
-          extractServiceNameFromUrl(website.name)
-        }}</a>
-        <span class="websiteStatus" v-if="website.status === 200">&#9989;</span>
-        <span class="websiteStatus" v-else>&#10060;</span>
+        <ProjectCard :website="website" />
       </li>
     </ul>
+
+    <p v-else-if="!hasError && !isLoading" class="empty-state">
+      No projects configured.
+    </p>
   </div>
 </template>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.dashboard {
+  animation: fadeIn 0.3s ease;
 }
-ul {
-  list-style-type: none;
+
+.project-list {
+  list-style: none;
   padding: 0;
-}
-li {
-  display: block;
-  margin: 10px 10px;
-}
-a {
-  color: #42b983;
-  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 }
 
-a:hover {
-  color: black;
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
 }
 
-#logo {
-  width: 25px;
-  height: 25px;
-}
-
-.websiteStatus {
-  margin-left: 1%;
-}
-
-.loader {
-  margin: auto;
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
   }
-  100% {
-    transform: rotate(360deg);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>
