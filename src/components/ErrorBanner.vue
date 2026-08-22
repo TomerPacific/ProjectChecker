@@ -22,9 +22,9 @@ defineEmits<{
         <line x1="12" y1="16" x2="12.01" y2="16" />
       </svg>
       <div>
-        <p class="error-banner__title">Couldn't reach status API</p>
+        <p class="error-banner__title">Unable to load project statuses</p>
         <p class="error-banner__message">
-          Check your connection and try again.
+          Something went wrong while fetching data. Please try again.
         </p>
       </div>
     </div>

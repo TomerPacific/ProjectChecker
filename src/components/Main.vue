@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import type { WebsiteStatus } from '../models/website_status'
 import type { WebsiteStatusResponse } from '../models/website_status_response'
 import ProjectHeader from './ProjectHeader.vue'
@@ -53,6 +53,11 @@ async function fetchStatuses() {
 }
 
 onMounted(fetchStatuses)
+
+onUnmounted(() => {
+  fetchController?.abort()
+  fetchController = null
+})
 </script>
 
 <template>
